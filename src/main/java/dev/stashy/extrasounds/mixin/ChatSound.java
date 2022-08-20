@@ -5,7 +5,9 @@ import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
+import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,10 +17,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ChatHud.class)
 public class ChatSound
 {
-    @Inject(at = @At("RETURN"), method = "addMessage(Lnet/minecraft/text/Text;IIZ)V")
-    private void messageSound(Text message, int messageId, int timestamp, boolean refresh, CallbackInfo ci)
+    @Inject(at = @At("RETURN"), method = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;Lnet/minecraft/client/gui/hud/MessageIndicator;)V")
+    private void messageSound(Text message, MessageSignatureData signature, MessageIndicator indicator, CallbackInfo ci)
     {
-        if (MinecraftClient.getInstance().player == null || refresh)
+        if (MinecraftClient.getInstance().player == null )
             return;
         String msg = message.getString();
         ClientPlayerEntity p = MinecraftClient.getInstance().player;
